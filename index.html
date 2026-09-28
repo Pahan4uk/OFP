@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12161c"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<title>ОФП</title>
+<style>
+:root{--bg:#0f1318;--card:#181e26;--card2:#202834;--line:#303b47;--text:#f4f6f8;--muted:#aab5c0;--acc:#6ad3a8;--warn:#eeb85d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:760px;margin:auto;padding:16px 12px 92px}h1{font-size:26px;margin:0 0 2px}.sub{color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}.card h2{font-size:18px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.metric{background:var(--card2);border-radius:12px;padding:12px}.metric b{font-size:22px}.small{font-size:13px;color:var(--muted)}
+.item{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;margin:7px 0}.item.done{opacity:.55}.item label{display:flex;gap:10px}.item input{width:20px;height:20px}
+select,input,textarea{width:100%;background:#10161c;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+.btn{border:0;border-radius:11px;padding:10px 12px;background:var(--acc);font-weight:700}.secondary{background:#2a3440;color:var(--text)}
+.row{display:flex;gap:8px;flex-wrap:wrap}.pill{display:inline-block;background:#24322e;color:#b7f1d8;border-radius:999px;padding:4px 8px;font-size:12px;margin:2px}
+nav{position:fixed;left:0;right:0;bottom:0;background:#0c1015ee;border-top:1px solid var(--line);display:flex;justify-content:center}
+nav div{max-width:760px;width:100%;display:grid;grid-template-columns:repeat(5,1fr)}nav button{background:none;border:0;color:var(--muted);padding:12px 4px;font-size:12px}nav button.on{color:var(--acc)}
+section{display:none}section.on{display:block}.timer{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}.notice{border-left:4px solid var(--warn);padding-left:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:480px){.grid,.two{grid-template-columns:1fr}}
+</style></head>
+<body><main>
+<h1>ОФП</h1><div class="sub">Личный тренировочный пульт · прототип v0.2</div>
+
+<section id="home" class="on">
+<div class="card"><h2>Сегодня</h2>
+<select id="cycle"><option value="duty">Сутки на работе</option><option value="recovery">После смены</option><option value="a">Полный выходной · тренировка A</option><option value="b">Полный выходной · тренировка B</option></select>
+<p id="todayPlan" class="notice"></p></div>
+<div class="card"><h2>Мои показатели</h2>
+<p class="small">Исходная «Точка 0», текущие значения и сравнение прогресса вынесены отдельно, чтобы главная не превращалась в приборную панель самолёта.</p>
+<button class="btn secondary" onclick="openPassport()">Открыть паспорт</button>
+</div>
+<div class="card"><h2>Ежедневная база</h2><span class="pill">Зарядка 8–10 мин</span><span class="pill">Мобильность 5–10 мин</span><span class="pill">Ходьба</span></div>
+</section>
+
+
+<section id="passport">
+<div class="card">
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div>
+      <h2 style="margin-bottom:2px">Паспорт физического состояния</h2>
+      <div class="small">T0 = Time Zero / «Точка 0» · исходные данные до регулярной программы</div>
+    </div>
+    <button class="btn secondary" onclick="openTab('home')">На главную</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Базовый профиль</h2>
+  <div class="grid">
+    <div class="metric"><div class="small">Возраст</div><b>37</b><div class="small">лет</div></div>
+    <div class="metric"><div class="small">Рост</div><b>193</b><div class="small">см</div></div>
+    <div class="metric"><div class="small">Вес T0</div><b>97</b><div class="small">кг</div></div>
+    <div class="metric"><div class="small">Талия T0</div><b>101</b><div class="small">см</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Диагностика T0</h2>
+  <div class="grid">
+    <div class="metric"><div class="small">Пульс покоя</div><b>68</b><div class="small">уд/мин</div></div>
+    <div class="metric"><div class="small">Отжимания</div><b>18</b><div class="small">чистых повторов</div></div>
+    <div class="metric"><div class="small">Планка</div><b>61</b><div class="small">сек</div></div>
+    <div class="metric"><div class="small">Баланс</div><b>30 / 30</b><div class="small">сек, левая / правая</div></div>
+  </div>
+  <div class="item"><b>Приседания</b><div class="small">20 медленных повторов · субъективная тяжесть 5–6/10.</div></div>
+  <div class="item"><b>Bird-dog</b><div class="small">Выполняется легко, заметной асимметрии нет.</div></div>
+  <div class="item"><b>Мобильность</b><div class="small">Глубокий присед в целом хороший. Зона внимания: голеностоп и мобильность плечевого пояса.</div></div>
+  <div class="item"><b>Плечи</b><div class="small">При подъёме рук у стены есть небольшой прогиб в пояснице; при длительном удержании отмечалось тянущее ощущение в левом плече без боли.</div></div>
+  <div class="item"><b>Выносливость</b><div class="small">3 минуты энергичной ходьбы перенесены легко; разговор сохранялся, одышка была небольшой и быстро ушла.</div></div>
+</div>
+
+<div class="card">
+  <h2>Текущие показатели</h2>
+  <div class="grid">
+    <div class="metric"><div class="small">Пульс</div><b id="pPulse">68</b><div class="small">уд/мин</div></div>
+    <div class="metric"><div class="small">Отжимания</div><b id="pPush">18</b><div class="small">повторов</div></div>
+    <div class="metric"><div class="small">Планка</div><b id="pPlank">61</b><div class="small">сек</div></div>
+    <div class="metric"><div class="small">Талия</div><b id="pWaist">101</b><div class="small">см</div></div>
+  </div>
+  <p class="small">Эти цифры автоматически берутся из последнего сохранённого замера на вкладке «Прогресс». Исходные значения T0 при этом не переписываются.</p>
+</div>
+
+<div class="card">
+  <h2>Цели</h2>
+  <span class="pill">Общее физическое развитие</span>
+  <span class="pill">Здоровье и тонус</span>
+  <span class="pill">Физический резерв</span>
+  <span class="pill">50 отжиманий</span>
+  <span class="pill">10 подтягиваний</span>
+  <span class="pill">Стойка на руках</span>
+  <span class="pill">Гибкость / шпагат</span>
+</div>
+</section>
+
+<section id="today"><div class="card"><h2>Утренняя зарядка</h2><div id="morning"></div></div><div class="card"><h2>Ежедневная мобильность</h2><div id="mobility"></div></div></section>
+
+<section id="workout"><div class="card"><h2>Основная тренировка · стартовый каркас</h2><div id="workoutList"></div></div>
+<div class="card"><h2>Таймер отдыха</h2><div id="timer" class="timer">01:00</div><div class="row"><button class="btn" onclick="startTimer(60)">60 сек</button><button class="btn secondary" onclick="startTimer(90)">90 сек</button><button class="btn secondary" onclick="startTimer(120)">120 сек</button></div></div></section>
+
+<section id="progress"><div class="card"><h2>Новый контрольный замер</h2><div class="two">
+<label>Вес, кг<input id="weight" type="number" step=".1" value="97"></label><label>Талия, см<input id="waist" type="number" step=".1" value="101"></label>
+<label>Пульс покоя<input id="pulse" type="number" value="68"></label><label>Отжимания<input id="push" type="number" value="18"></label>
+<label>Планка, сек<input id="plank" type="number" value="61"></label><label>Подтягивания<input id="pull" type="number" value="0"></label></div>
+<p><button class="btn" onclick="saveMetric()">Сохранить замер</button></p></div><div class="card"><h2>История</h2><div id="history"></div></div></section>
+
+<section id="log"><div class="card"><h2>Журнал тренировки</h2><div class="two">
+<label>Дата<input id="date" type="date"></label><label>Сон, ч<input id="sleep" type="number" step=".5"></label>
+<label>Самочувствие 1–5<input id="feel" type="number" min="1" max="5"></label><label>RPE 1–10<input id="rpe" type="number" min="1" max="10"></label></div>
+<label>Комментарий<textarea id="note" rows="4"></textarea></label><p><button class="btn" onclick="saveLog()">Сохранить</button></p></div>
+<div class="card"><h2>Последние записи</h2><div id="logs"></div></div>
+<div class="card"><h2>Резервная копия</h2><div class="row"><button class="btn secondary" onclick="exportData()">Экспорт JSON</button><label class="btn secondary">Импорт JSON<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label></div></div></section>
+</main>
+
+<nav><div><button class="on" data-id="home">Главная</button><button data-id="today">Сегодня</button><button data-id="workout">Тренировка</button><button data-id="progress">Прогресс</button><button data-id="log">Журнал</button></div></nav>
+
+<script>
+const KEY='ofp-v021';let S=JSON.parse(localStorage.getItem(KEY)||'{"checks":{},"metrics":[],"logs":[]}');const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+const morning=[['Ходьба на месте + руки','60 сек'],['Плечи + повороты корпуса','60 сек'],['Приседания','10–15'],['Отжимания','5–10'],['Выпады назад','5/сторона'],['Bird-dog','6–8/сторона'],['Планка','15–30 сек'],['Энергичная ходьба','60–90 сек'],['Потянуться + дыхание','30–60 сек']];
+const mobility=[['Шея','30–40 сек'],['Плечи и лопатки','10 кругов'],['Руки над головой','8–10'],['Грудной отдел','8/сторона'],['Таз','8–10 кругов'],['Тазобедренные','6–8/нога'],['Выпад + вытяжение','5/сторона'],['Голеностоп','10–15/нога'],['Приседания','8–10'],['Финишное вытяжение','30–60 сек']];
+const workout=[['Разминка','7–10 мин'],['Приседания','2×12'],['Отжимания','3×8–10'],['Выпады назад','2×8/сторона'],['Bird-dog','2×6/сторона'],['Боковая планка','2×15–25 сек/сторона'],['Быстрая ходьба / марш','6–10 мин'],['Заминка + растяжка','6–8 мин']];
+function list(id,data,prefix){let r=document.getElementById(id);r.innerHTML=data.map((x,i)=>{let k=prefix+i,c=S.checks[k];return `<div class="item ${c?'done':''}"><label><input type="checkbox" ${c?'checked':''} onchange="S.checks['${k}']=this.checked;save();this.closest('.item').classList.toggle('done',this.checked)"><div><b>${x[0]}</b><div class="small">${x[1]}</div></div></label></div>`}).join('')}
+list('morning',morning,'m');list('mobility',mobility,'o');list('workoutList',workout,'w');
+function openTab(id){
+  document.querySelectorAll('section').forEach(x=>x.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.id===id));
+  if(id==='passport') updatePassport();
+}
+function openPassport(){openTab('passport')}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>openTab(b.dataset.id));
+const plan={duty:'Сутки: мобильность 5–10 минут + прогулка. Без полноценной тренировки.',recovery:'После смены: сон/отдых, прогулка и мягкая мобильность 10–20 минут.',a:'Выходной A: основная ОФП-тренировка, без работы до отказа.',b:'Выходной B: умеренная вторая тренировка, больше мобильности и аэробной работы.'};
+cycle.value=S.cycle||'duty';function showPlan(){todayPlan.textContent=plan[cycle.value]}cycle.onchange=()=>{S.cycle=cycle.value;save();showPlan()};showPlan();
+date.value=new Date().toISOString().slice(0,10);
+function saveMetric(){S.metrics.push({date:date.value||new Date().toISOString().slice(0,10),weight:weight.value,waist:waist.value,pulse:pulse.value,push:push.value,plank:plank.value,pull:pull.value});save();render()}
+function saveLog(){S.logs.push({date:date.value,sleep:sleep.value,feel:feel.value,rpe:rpe.value,note:note.value});save();note.value='';render()}
+function updatePassport(){
+  const latest=S.metrics.length?S.metrics[S.metrics.length-1]:null;
+  pPulse.textContent=latest?.pulse||68;
+  pPush.textContent=latest?.push||18;
+  pPlank.textContent=latest?.plank||61;
+  pWaist.textContent=latest?.waist||101;
+}
+function render(){
+  history.innerHTML=S.metrics.slice(-8).reverse().map(x=>`<div class="item"><b>${x.date}</b><div class="small">Вес ${x.weight} · талия ${x.waist} · пульс ${x.pulse} · отжимания ${x.push} · планка ${x.plank} · подтягивания ${x.pull}</div></div>`).join('')||'<div class="small">Пока пусто.</div>';
+  logs.innerHTML=S.logs.slice(-8).reverse().map(x=>`<div class="item"><b>${x.date}</b><div class="small">Сон ${x.sleep||'—'} ч · самочувствие ${x.feel||'—'}/5 · RPE ${x.rpe||'—'}/10</div><div>${x.note||''}</div></div>`).join('')||'<div class="small">Пока пусто.</div>';
+  updatePassport();
+}
+render();
+let T;function startTimer(s){clearInterval(T);let n=s;timer.textContent=`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;T=setInterval(()=>{n--;timer.textContent=`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;if(n<=0){clearInterval(T);navigator.vibrate&&navigator.vibrate([120,80,120])}},1000)}
+function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));a.download='ofp-backup.json';a.click()}
+function importData(e){let f=e.target.files[0],r=new FileReader();r.onload=()=>{S=JSON.parse(r.result);save();location.reload()};r.readAsText(f)}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+</script></body></html>
